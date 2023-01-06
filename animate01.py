@@ -1,3 +1,8 @@
+"""
+This script is for beginners to render an animation, 
+which consist of cubes rotating and scaling.
+"""
+
 import argparse
 from ast import List
 import os
@@ -6,7 +11,8 @@ import sys
 import bpy
 import numpy as np
 
-sys.path.append(r"F:\MyPython\blender")
+ROOT_PATH = "/mnt/f/MyPython/blender_playground/blender"
+sys.path += [ROOT_PATH, os.path.join(ROOT_PATH, "utils")]
 from utils.bpy_utils import clear_scene, save_proj, render, initialize_camera
 from utils.utils import compute_rgba_from_percentage, rename_by_timestamp
 

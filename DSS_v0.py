@@ -1,3 +1,8 @@
+"""
+This script aims to remake the scene of death of Nagisa in EVA, 
+i.e. the explosion of DSS choker on his neck.
+"""
+
 import argparse
 import os
 import sys
@@ -6,7 +11,7 @@ from ast import List
 import bpy
 import numpy as np
 
-ROOT_PATH = r"F:\MyPython\blender"
+ROOT_PATH = "/mnt/f/MyPython/blender_playground/blender"
 sys.path += [ROOT_PATH, os.path.join(ROOT_PATH, "utils")]
 from utils.bpy_utils import (clear_scene, duplicate_object, import_object,
                              initialize_camera, render, save_proj, create_light, create_plane, create_material)
@@ -48,10 +53,7 @@ def initialize_mirror():
     plane_obj.data.materials.append(mirror_mat)
 
 
-
-
-
-def initialize_dss_crystals(file_path: str = os.path.join(ROOT_PATH, "Asset\Gem\DSS_v1.blend"), num: int = 12):
+def initialize_dss_crystals(file_path: str = os.path.join(ROOT_PATH, "Asset", "Gem", "DSS_v1.blend"), num: int = 12):
     """Put 12 DSS crystals at initial postures."""
     prototype_obj = import_object(file_path=file_path, object_name="DSS")
     print(f"prototype_obj: {prototype_obj}")
@@ -71,6 +73,7 @@ def initialize_dss_crystals(file_path: str = os.path.join(ROOT_PATH, "Asset\Gem\
     bpy.data.objects.remove(prototype_obj)
 
     return obj_list
+
 
 
 def stage1(obj_list, t_total, d_yaw_total = 2 * np.pi, d_roll_total = 16 * np.pi):
@@ -93,10 +96,10 @@ def stage1(obj_list, t_total, d_yaw_total = 2 * np.pi, d_roll_total = 16 * np.pi
 def main():
     ########## CONFIG ##########
     exp_name = "DSS_v0"
-    img_dir = os.path.join(r"F:\MyPython\blender\rendered", exp_name)
+    img_dir = os.path.join(ROOT_PATH, "rendered", exp_name)
     img_dir = rename_by_timestamp(img_dir, is_file=False)
 
-    proj_file = os.path.join(r"F:\MyPython\blender\projs", exp_name+".blend")
+    proj_file = os.path.join(ROOT_PATH, "projs", exp_name+".blend")
     proj_file = rename_by_timestamp(proj_file, is_file=True)
     
     # frame_num = 600
@@ -132,15 +135,15 @@ def main():
     stage1(obj_list, frame_num)
 
 
-    # ########## RENDER ##########
-    # obj = obj_list[0]
-    # fc = obj.animation_data.action.fcurves[0]
-    # for k in fc.keyframe_points:
-    #     t= int(k.co[0])
-    #     img_path = os.path.join(img_dir, f"frame_{t:04d}.exr")
-    #     bpy.context.scene.frame_set(t)
-    #     bpy.context.view_layer.update()
-    #     render(cam, img_path, pref="fast")
+    ########## RENDER ##########
+    obj = obj_list[0]
+    fc = obj.animation_data.action.fcurves[0]
+    for k in fc.keyframe_points:
+        t= int(k.co[0])
+        img_path = os.path.join(img_dir, f"frame_{t:04d}.exr")
+        bpy.context.scene.frame_set(t)
+        bpy.context.view_layer.update()
+        render(cam, img_path, pref="fast")
 
 
 

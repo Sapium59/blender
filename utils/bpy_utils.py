@@ -28,18 +28,16 @@ def render(cam, img_path, pref="fast", write_still=True, animation=False):
     """
     # render settings
     bpy.data.scenes[0].render.engine = "CYCLES"
+    bpy.context.scene.cycles.device = 'GPU'
     if pref == "good":
         bpy.context.scene.cycles.samples = 4096
         bpy.context.scene.cycles.time_limit = 60
-        bpy.context.scene.cycles.device = 'GPU'
     elif pref == "fast":
         bpy.context.scene.cycles.samples = 256
         bpy.context.scene.cycles.time_limit = 10
-        bpy.context.scene.cycles.device = 'GPU'
     elif pref == "very_fast":
         bpy.context.scene.cycles.samples = 16
         bpy.context.scene.cycles.time_limit = 1
-        bpy.context.scene.cycles.device = 'GPU'
     else:
         print(f"[WARNING] invalid render preference: `{pref}`. Using `fast` instead.")
         render(cam, img_path, pref="fast")
